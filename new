@@ -499,3 +499,40 @@ except Exception as e:
         exc_info=True,
     )
     raise
+
+
+
+
+
+
+*** Reading remote logs from Cloud Logging.
+[2026-04-28 18:15:33.006443+00:00] {local_task_job_runner.py:123} ▼ Pre task execution logs
+[2026-04-28 18:15:33.060135+00:00] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: domain_card_management_embossing_terminus_mapping_table_management.execute_table_schema_changes manual__2026-04-28T18:15:29.977359+00:00 [queued]>
+[2026-04-28 18:15:33.084474+00:00] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: domain_card_management_embossing_terminus_mapping_table_management.execute_table_schema_changes manual__2026-04-28T18:15:29.977359+00:00 [queued]>
+[2026-04-28 18:15:33.085475+00:00] {taskinstance.py:2867} INFO - Starting attempt 1 of 1
+[2026-04-28 18:15:33.123813+00:00] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): execute_table_schema_changes> on 2026-04-28 18:15:29.977359+00:00
+[2026-04-28 18:15:33.138828+00:00] {standard_task_runner.py:72} INFO - Started process 2746229 to run task
+[2026-04-28 18:15:33.141705+00:00] {standard_task_runner.py:104} INFO - Running: ['airflow', 'tasks', 'run', 'domain_card_management_embossing_terminus_mapping_table_management', 'execute_table_schema_changes', 'manual__2026-04-28T18:15:29.977359+00:00', '--job-id', '1429962', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_table_management/bigquery_table_management_dag.py', '--cfg-path', '/tmp/tmpi0v1opas']
+[2026-04-28 18:15:33.141820+00:00] {standard_task_runner.py:105} INFO - Job 1429962: Subtask execute_table_schema_changes
+[2026-04-28 18:15:33.254448+00:00] {task_command.py:473} INFO - Running <TaskInstance: domain_card_management_embossing_terminus_mapping_table_management.execute_table_schema_changes manual__2026-04-28T18:15:29.977359+00:00 [running]> on host airflow-worker-4ldp7
+[2026-04-28 18:15:33.481870+00:00] {taskinstance.py:3133} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='team-centaurs' AIRFLOW_CTX_DAG_ID='domain_card_management_embossing_terminus_mapping_table_management' AIRFLOW_CTX_TASK_ID='execute_table_schema_changes' AIRFLOW_CTX_EXECUTION_DATE='2026-04-28T18:15:29.977359+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-04-28T18:15:29.977359+00:00'
+[2026-04-28 18:15:33.483075+00:00] {taskinstance.py:732} ▲▲▲ Log group end
+[2026-04-28 18:15:33.515035+00:00] {bigquery_table_management_dag.py:212} INFO - Starting schema execution for table: pcb-dev-landing.domain_card_management.EMBOSSING_TERMINUS_MAPPING
+[2026-04-28 18:15:33.515089+00:00] {bigquery_table_management_dag.py:222} INFO - Processing script: bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml
+[2026-04-28 18:15:33.515442+00:00] {yaml_handler.py:90} INFO - Processing YAML config: bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml
+[2026-04-28 18:15:33.515597+00:00] {miscutils.py:267} INFO - reading file: file name=/home/airflow/gcs/dags/bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml, deploy env=dev
+[2026-04-28 18:15:33.517773+00:00] {yaml_handler.py:97} INFO - Detected clustering operation, routing to ClusteringProcessor
+[2026-04-28 18:15:34.128056+00:00] {audit.py:86} INFO - Audit table ensured: pcb-dev-landing.domain_technical.BIGQUERY_TABLE_MANAGEMENT_AUDIT
+[2026-04-28 18:15:34.128137+00:00] {base_processor.py:97} INFO - Processing script: bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml
+[2026-04-28 18:15:34.721444+00:00] {base_processor.py:108} INFO - Skipping already applied script: bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml (version 1)
+[2026-04-28 18:15:34.721502+00:00] {bigquery_table_management_dag.py:242} INFO - Skipped (already applied): bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml
+[2026-04-28 18:15:34.721663+00:00] {bigquery_table_management_dag.py:252} INFO - Schema execution completed.
+[2026-04-28 18:15:34.721857+00:00] {python.py:240} INFO - Done. Returned value was: None
+[2026-04-28 18:15:35.187615+00:00] {backend.py:85} INFO - Data lineage sent dag_id=domain_card_management_embossing_terminus_mapping_table_management, task_id=execute_table_schema_changes, run_id=manual__2026-04-28T18:15:29.977359+00:00, try_number=1, operator=PythonOperator
+Process: name=projects/pcb-dev-processing/locations/northamerica-northeast1/processes/64eb742c-ef9b-b837-0472-881d7113e031
+Run: name=projects/pcb-dev-processing/locations/northamerica-northeast1/processes/64eb742c-ef9b-b837-0472-881d7113e031/runs/1af04bce-761e-e0a3-9d09-c12837e7f195, state=2
+[2026-04-28 18:15:35.223774+00:00] {taskinstance.py:340} ▼ Post task execution logs
+[2026-04-28 18:15:35.225379+00:00] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=domain_card_management_embossing_terminus_mapping_table_management, task_id=execute_table_schema_changes, run_id=manual__2026-04-28T18:15:29.977359+00:00, execution_date=20260428T181529, start_date=20260428T181533, end_date=20260428T181535
+[2026-04-28 18:15:35.283446+00:00] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-04-28 18:15:35.343553+00:00] {taskinstance.py:3903} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-04-28 18:15:35.348713+00:00] {local_task_job_runner.py:245} ▲▲▲ Log group end
