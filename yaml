@@ -1,0 +1,940 @@
+# DAG ID format: {dataset}_{table_name}_table_management
+# table_ref: pcb-{env}-landing.<dataset>.<TABLE_NAME>
+# scripts: paths relative to DAGs folder, ordered V1, V2, V3...
+#   - SQL scripts: .sql files (e.g., V1__CREATE_TABLE.sql)
+#   - YAML configs: .yaml files with content-based routing (e.g., V5__CLUSTER_BY_ID.yaml)
+#     * clustering_fields -> ClusteringProcessor
+#     * partition_field -> PartitioningHandler (future)
+#     * transformations -> SchemaEvolutionHandler (future)
+
+# =============================================================================
+# Standard template (uncomment and replace placeholders before adding new table)
+# =============================================================================
+# {dataset}_{table_name}_table_management:
+#   default_args:
+#     owner: "team-centaurs"
+#     capability: "Data Platform"
+#     sub_capability: "NV"
+#     business_impact: "NA"
+#     customer_impact: "NA"
+#     severity: "P3"
+#   tags:
+#     - "team-centaurs"
+#     - "bigquery-table-management"
+#   table_ref: pcb-{env}-landing.<dataset>.<TABLE_NAME>
+#   scripts:
+#     - bigquery_table_management/schemas/<dataset>/<table>/V1__CREATE_TABLE_<TABLE>.sql
+#     - bigquery_table_management/schemas/<dataset>/<table>/V2__ALTER_ADD_COLUMN.sql
+#     - bigquery_table_management/schemas/<dataset>/<table>/V3__CLUSTER_BY_ID.yaml
+#     - bigquery_table_management/schemas/<dataset>/<table>/V4__DROP_TABLE_<TABLE>.sql
+
+## domain_audit
+
+domain_audit_ADMIN_API_AUDIT_table_management:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "legal-compliance"
+    sub_capability: "audit"
+    business_impact: "Auditing of changes made within Admin portal will be limited."
+    customer_impact: "No customer impact."
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_audit.ADMIN_API_AUDIT
+  scripts:
+    - bigquery_table_management/schemas/domain_audit/ADMIN_API_AUDIT/V1__CREATE_TABLE.sql
+
+domain_audit_sf_user_table_management:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "legal-compliance"
+    sub_capability: "audit"
+    business_impact: "Auditing of changes made within Admin portal will be limited."
+    customer_impact: "No customer impact."
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_audit.SF_USER
+  scripts:
+    - bigquery_table_management/schemas/domain_audit/SF_USER/V1__REMOVE_CLUSTERING.yaml
+
+## domain_card_management
+
+domain_card_management_embossing_terminus_mapping_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_TERMINUS_MAPPING
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/EMBOSSING_TERMINUS_MAPPING/V1__CLUSTER_BY.yaml
+
+domain_card_management_instant_issuance_orchestration_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/INSTANT_ISSUANCE_ORCHESTRATION/V1__CLUSTER_BY.yaml
+
+domain_card_management_embossing_fastcard_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_FASTCARD_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/EMBOSSING_FASTCARD_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_ii_pushed_data_status_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.II_PUSHED_DATA_STATUS_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/II_PUSHED_DATA_STATUS_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_embossing_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/EMBOSSING_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_instant_issuance_customer_info_for_requested_card_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_CUSTOMER_INFO_FOR_REQUESTED_CARD
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/INSTANT_ISSUANCE_CUSTOMER_INFO_FOR_REQUESTED_CARD/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_ii_tsys_pushed_data_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.II_TSYS_PUSHED_DATA_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/II_TSYS_PUSHED_DATA_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_ii_state_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.II_STATE_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/II_STATE_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_ii_fulfill_master_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.II_FULFILL_MASTER_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/II_FULFILL_MASTER_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_embossing_reissue_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_REISSUE_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/EMBOSSING_REISSUE_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_instant_issuance_requested_card_details_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_REQUESTED_CARD_DETAILS
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/INSTANT_ISSUANCE_REQUESTED_CARD_DETAILS/V1__REMOVE_CLUSTERING.yaml
+
+domain_card_management_ii_tsys_push_clob_archive_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "card management"
+    sub_capability: "Card Management"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "card management"
+  table_ref: pcb-{env}-landing.domain_card_management.II_TSYS_PUSH_CLOB_ARCHIVE
+  scripts:
+    - bigquery_table_management/schemas/domain_card_management/II_TSYS_PUSH_CLOB_ARCHIVE/V1__REMOVE_CLUSTERING.yaml
+
+## domain_communication
+
+domain_communication_email_status_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "communication"
+    sub_capability: "Communication"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "communication"
+    - "email"
+  table_ref: pcb-{env}-landing.domain_communication.EMAIL_STATUS
+  scripts:
+    - bigquery_table_management/schemas/domain_communication/EMAIL_STATUS/V1__CLUSTER_BY.yaml
+
+domain_communication_email_unsubscribed_event_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "communication"
+    sub_capability: "Communication"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "communication"
+    - "email"
+  table_ref: pcb-{env}-landing.domain_communication.EMAIL_UNSUBSCRIBED_EVENT
+  scripts:
+    - bigquery_table_management/schemas/domain_communication/EMAIL_UNSUBSCRIBED_EVENT/V1__REMOVE_CLUSTERING.yaml
+
+domain_communication_dns_updated_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "communication"
+    sub_capability: "Communication"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "communication"
+    - "email"
+  table_ref: pcb-{env}-landing.domain_communication.DNS_UPDATED
+  scripts:
+    - bigquery_table_management/schemas/domain_communication/DNS_UPDATED/V1__REMOVE_CLUSTERING.yaml
+  
+## cots_scms_andis_se
+
+domain_cots_scms_andis_se_phs_application_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.cots_scms_andis_se.PHS_APPLICATION
+  scripts:
+    - bigquery_table_management/schemas/cots_scms_andis_se/PHS_APPLICATION/V1__CLUSTER_BY.yaml
+
+domain_cots_scms_andis_se_history_phs_application_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.cots_scms_andis_se.HISTORY_PHS_APPLICATION
+  scripts:
+    - bigquery_table_management/schemas/cots_scms_andis_se/HISTORY_PHS_APPLICATION/V1__CLUSTER_BY.yaml
+
+## domain_account_management
+
+domain_account_management_events_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.EVENTS
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/EVENTS/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa30_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA30
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA30/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa30_tsys_buckets_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA30_TSYS_BUCKETS
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA30_TSYS_BUCKETS/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa40_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA40
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA40/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa20_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA20
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA20/V1__CLUSTER_BY.yaml
+
+domain_account_management_operator_inquiry_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.OPERATOR_INQUIRY
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/OPERATOR_INQUIRY/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa14_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA14
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA14/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa85_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA85
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA85/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa15_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA15
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA15/V1__CLUSTER_BY.yaml
+
+domain_account_management_pc_download_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.PC_DOWNLOAD
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/PC_DOWNLOAD/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa59_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA59
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA59/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa10_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA10
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA10/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa41_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA41
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA41/V1__CLUSTER_BY.yaml
+
+domain_account_management_sa60_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.SA60
+  scripts:
+      - bigquery_table_management/schemas/domain_account_management/SA60/V1__CLUSTER_BY.yaml
+
+## domain_fraud
+
+domain_fraud_cardguard_caselog_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_fraud.CARDGUARD_CASELOG
+  scripts:
+      - bigquery_table_management/schemas/domain_fraud/CARDGUARD_CASELOG/V1__REMOVE_CLUSTERING.yaml
+
+domain_fraud_risk_intelligence_fraud_risk_update_response_table_management:
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    severity: 'P3'
+  tags:
+    - "team-ogres"
+    - "bigquery-table-management"
+    - "domain_fraud_risk_intelligence"
+  table_ref: pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_UPDATE_RESPONSE
+  scripts:
+    - bigquery_table_management/schemas/domain_fraud_risk_intelligence/FRAUD_RISK_UPDATE_RESPONSE/V1__ALTER_TABLE.sql
+    - bigquery_table_management/schemas/domain_fraud_risk_intelligence/FRAUD_RISK_UPDATE_RESPONSE/V2__ALTER_TABLE_ADD_COLUMN.sql
+
+domain_customer_contact_centre_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "customer-service"
+    sub_capability: "NA"
+    business_impact: "Reporting on contact centre calls impacted"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+  table_ref: pcb-{env}-landing.domain_customer_contact_centre.CALL_CONVERSATION_STATE
+  scripts:
+      - bigquery_table_management/schemas/domain_customer_contact_centre/CALL_CONVERSATION_STATE/V1__CREATE_TABLE.sql
+
+## domain_loyalty
+
+domain_loyalty_loyalty_points_earned_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/LOYALTY_POINTS_EARNED/V1__CLUSTER_BY.yaml
+
+domain_loyalty_loyalty_points_earned_lifetime_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED_LIFETIME
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/LOYALTY_POINTS_EARNED_LIFETIME/V1__CLUSTER_BY.yaml
+
+domain_loyalty_loyalty_subscription_usage_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/LOYALTY_SUBSCRIPTION_USAGE/V1__CLUSTER_BY.yaml
+
+domain_loyalty_loyalty_subscription_usage_lifetime_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE_LIFETIME
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/LOYALTY_SUBSCRIPTION_USAGE_LIFETIME/V1__CLUSTER_BY.yaml
+
+domain_loyalty_pco_missing_transactions_table_management:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "ESSO"
+    business_impact: "No Impact, since this is analytical data"
+    customer_impact: "No Impact, since this is analytical data"
+    severity: 'P3'
+  tags:
+    - "team-convergence-alerts"
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_loyalty.PCO_MISSING_TRANSACTIONS
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/PCO_MISSING_TRANSACTIONS/V1__CREATE_TABLE.sql
+
+domain_loyalty_lylty_que_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.LYLTY_QUE
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/LYLTY_QUE/V1__CLUSTER_BY.yaml
+
+domain_loyalty_pcf_card_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.PCF_CARD
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/PCF_CARD/V1__CLUSTER_BY.yaml
+
+domain_loyalty_pco_scoring_file_status:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "PCO"
+    business_impact: "No Impact, since this is analytical data"
+    customer_impact: "No Impact, since this is analytical data"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+    - "loyalty"
+  table_ref: pcb-{env}-landing.domain_loyalty.PCO_SCORING_FILE_STATUS
+  scripts:
+    - bigquery_table_management/schemas/domain_loyalty/PCO/V1__CREATE_TABLE.sql
+
+## domain_marketing
+
+domain_marketing_audit_mac_actions_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_marketing.AUDIT_MAC_ACTIONS
+  scripts:
+      - bigquery_table_management/schemas/domain_marketing/AUDIT_MAC_ACTIONS/V1__CLUSTER_BY.yaml
+
+domain_marketing_xsell_log_summary_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_marketing.XSELL_LOG_SUMMARY
+  scripts:
+      - bigquery_table_management/schemas/domain_marketing/XSELL_LOG_SUMMARY/V1__REMOVE_CLUSTERING.yaml
+
+domain_marketing_xsell_log_detail_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_marketing.XSELL_LOG_DETAIL
+  scripts:
+      - bigquery_table_management/schemas/domain_marketing/XSELL_LOG_DETAIL/V1__CLUSTER_BY.yaml
+
+## domain_scoring
+
+domain_scoring_credscore_t0010_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_scoring.CREDSCORE_T0010
+  scripts:
+    - bigquery_table_management/schemas/domain_scoring/CREDSCORE_T0010/V1__CLUSTER_BY.yaml
+
+domain_scoring_credscore_t0030_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Potential query failure for downstream consumers due to policy tag conflict"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_scoring.CREDSCORE_T0030
+  scripts:
+    - bigquery_table_management/schemas/domain_scoring/CREDSCORE_T0030/V1__CLUSTER_BY.yaml
+
+domain_iam_iam_authentication_table_management:
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_iam.IAM_AUTHENTICATION
+  scripts:
+    - bigquery_table_management/schemas/domain_iam/IAM_AUTHENTICATION/V1__ALTER_TABLE_ADD_COLUMN.sql
+
+domain_ops_adhoc_table_management:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Data Operations"
+    business_impact: "Reversal search tool results"
+    customer_impact: "Low"
+    severity: 'P3'
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_ops_adhoc.REVERSAL_SEARCH_RESULTS
+  scripts:
+    - bigquery_table_management/schemas/domain_ops_adhoc/REVERSAL_SEARCH_RESULTS/V1__CREATE_TABLE.sql
+
+domain_account_management_loyalty_bulk_offer_account_table_management:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+  table_ref: pcb-{env}-landing.domain_account_management.LOYALTY_BULK_OFFER_ACCOUNT
+  scripts:
+    - bigquery_table_management/schemas/domain_account_management/LOYALTY_BULK_OFFER_ACCOUNT/V1__CREATE_TABLE.sql
+  
+ # =============================================================================
+# Terraform → Airflow Migration (V0 audit backfill for existing tables)
+# =============================================================================
+
+domain_card_management_embossing_terminus_mapping_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_TERMINUS_MAPPING
+  scripts:
+    - terraform
+
+domain_card_management_instant_issuance_orchestration_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION
+  scripts:
+    - terraform
+
+domain_communication_dns_updated_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_communication.DNS_UPDATED
+  scripts:
+    - terraform
+
+domain_communication_email_status_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_communication.EMAIL_STATUS
+  scripts:
+    - terraform
+
+domain_communication_email_unsubscribed_event_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_communication.EMAIL_UNSUBSCRIBED_EVENT
+  scripts:
+    - terraform
+
+domain_loyalty_loyalty_points_earned_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED
+  scripts:
+    - terraform
+
+domain_loyalty_loyalty_points_earned_lifetime_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED_LIFETIME
+  scripts:
+    - terraform
+
+domain_loyalty_loyalty_subscription_usage_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE
+  scripts:
+    - terraform
+
+domain_loyalty_loyalty_subscription_usage_lifetime_migration:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    sub_capability: "Table Management Migration"
+    business_impact: "Terraform state cleanup and audit backfill"
+    customer_impact: "NA"
+    severity: "P3"
+  tags:
+    - "bigquery-table-management"
+    - "terraform-migration"
+  table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE_LIFETIME
+  scripts:
+    - terraform
